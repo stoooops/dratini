@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  dev:
+    container_name: vue-template_dev
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    command: npm run serve
+    volumes:
+      - ../:/app
+      # When using the /app/node_modules inside the docker, vue-cli-service serve fails
+      # to find the primevue/primeicon packages.
+      # Inspecting /app/node_modules, both packages are present.
+      # After much debugging, this could not be solved so I'm falling back to volume mounting for now
+      #
+      # I also tried using Vite, but the template project fails to build.
+      # Can try again later.
+      #
+      - /app/node_modules # <---- this enables a much faster start/reload
+    ports:
+      - "8080:8080"
+      - "443:443"
+    environment:
+      - CHOKIDAR_USEPOLLING=true # <---- this enables the hot reloading?

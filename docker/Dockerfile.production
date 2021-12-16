@@ -1,0 +1,10 @@
+FROM nginx:stable-alpine as production-stage
+
+# must be tagged
+COPY --from=vue-template /app/dist /usr/share/nginx/html
+COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
+
+EXPOSE 80
+EXPOSE 443
+
+CMD ["nginx", "-g", "daemon off;"]

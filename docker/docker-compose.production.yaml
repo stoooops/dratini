@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  prod:
+    container_name: vue-template_prod
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.production
+    volumes:
+      - ../:/app
+      - /app/node_modules # <---- this enables a much faster start/reload
+      - ../certs:/etc/nginx/certs
+      - ../nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CHOKIDAR_USEPOLLING=true # <---- this enables the hot reloading?
